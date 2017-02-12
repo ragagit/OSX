@@ -273,7 +273,49 @@ int main(int argc, const char * argv[]) {
         
         //Set Objects
         //It is collection of unique objects
+        NSMutableSet *set1 = [NSMutableSet setWithObjects:@1, @2, @3, nil];
+        NSMutableSet *set2 = [NSMutableSet setWithObjects:@10, @20, @30, nil];
+        NSMutableSet *set3 = [NSMutableSet setWithObjects:@11, @22, @33, nil];
         
+        NSLog(@"set1: ");
+        [set1 print];
+        NSLog(@"set2: ");
+        [set2 print];
+        NSLog(@"set3: ");
+        [set3 print];
+        
+        //set is equal to
+        if( [set1 isEqualToSet:set2] == YES)
+            NSLog(@"set1 equals set2");
+        else
+            NSLog(@"set1 is not equals set2");
+        
+        //set contains
+        if( [set1 containsObject :@10] == YES)
+            NSLog(@"set1 contains 10");
+        else
+            NSLog(@"set1 does not contain 10");
+
+        //Adding object
+        [set1 addObject:@44];
+        
+        //Removing object
+        [set1 removeObject:@10];
+        
+        NSLog(@"set1 after adding 4 and removing 10");
+        [set1 print];
+        
+        //Intersection
+        [set1 intersectSet:set2];
+        [set1 print];
+        
+        //Union
+        [set1 unionSet:set3];
+        [set1 print];
+        
+        //NSCountedSet can havd repeated objects, it just keep a count on each one
+        
+        //NSindexSet is used to store ordered indexes into some other data structure
     }
     return 0;
 }
