@@ -21,7 +21,7 @@
 //-(NSString*) email;
 -(void)print;
 -(void)setName:(NSString*)theName andEmail:(NSString*)theEmail;
-
+-(NSComparisonResult)compareNames:(id) element;
 
 @end
 
@@ -32,5 +32,8 @@
 -(NSUInteger)entries;
 -(void)list;
 -(void)addCard:(AddressCard*)card;
+-(AddressCard*)lookup:(NSString*)theName;
+-(void)removeCard:(AddressCard*)theName;
+-(void)sort;
 @end
 #endif /* AddressCard_h */
