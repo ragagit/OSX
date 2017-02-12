@@ -88,8 +88,6 @@
     for(AddressCard *nextCard in book){
         if( [nextCard.name caseInsensitiveCompare:theName] == NSOrderedSame )
             return nextCard;
-        else
-            return nil;
     }
     return nil;
 }
@@ -100,6 +98,18 @@
 
 -(void)sort{
     [book sortUsingSelector:@selector(compareNames:)];
+}
+
+@end
+
+@implementation NSSet(Printing)
+
+-(void)print{
+    printf("{ ");
+    for(NSNumber *element in self){
+        NSLog(@"%li", (long)[element integerValue]);
+    }
+    printf("} \n");
 }
 
 @end
