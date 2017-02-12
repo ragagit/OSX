@@ -45,7 +45,9 @@
     NSLog(@"%s", [email UTF8String]);
 }
 
-
+-(NSComparisonResult)compareNames:(id) element{
+    return [name compare: [element name]];
+}
 @end
 
 @implementation AddressBook
@@ -76,8 +78,28 @@
     [book addObject:card];
 }
 -(void)list{
-    NSLog(@"Array content:%@", book);
+    //NSLog(@"Array content:%@", book);
+    //Fast enumeration
+    for( AddressCard *theCard in book)
+        NSLog(@"%s %s", [theCard.name UTF8String], [theCard.email UTF8String]);
 }
 
+-(AddressCard*)lookup:(NSString *)theName{
+    for(AddressCard *nextCard in book){
+        if( [nextCard.name caseInsensitiveCompare:theName] == NSOrderedSame )
+            return nextCard;
+        else
+            return nil;
+    }
+    return nil;
+}
+
+-(void)removeCard:(AddressCard*)theCard{
+    [book removeObjectIdenticalTo:theCard];
+}
+
+-(void)sort{
+    [book sortUsingSelector:@selector(compareNames:)];
+}
 
 @end
