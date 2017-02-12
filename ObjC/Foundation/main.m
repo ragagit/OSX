@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "AddressCard.h"
 
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
@@ -51,8 +52,8 @@ int main(int argc, const char * argv[]) {
         
         //NSString is unmutable
         //We can use %@ to print any string, content of an array, dictionaries and sets
-        //description is a methid that if it doesn't get overriden it return the name of
-        //the class of the object and the meemory address
+        //description is a methd that if it doesn't get overriden it return the name of
+        //the class of the object and the memory address
         NSLog(@" string:%@ has length:%lu", str1, [str1 length]); // lenght of a string
         NSLog(@"Description of str object:%@", [str1 description]);
         
@@ -174,10 +175,104 @@ int main(int argc, const char * argv[]) {
         
         [mstr replaceOccurrencesOfString:search withString:replace options:0 range:NSMakeRange(0, [mstr length])];
         
-	//Arrays
-	//
+        //Arrays
+        NSArray *months = [NSArray arrayWithObjects:@"January", @"February", nil];
+        NSLog(@"%@", months);
         
+        for(int i=0; i<2; i++){
+            NSLog(@"%i %@", i, [months objectAtIndex:i]);
+        }
+        //You can also
+        NSArray *OtherMonths=@[@"March", @"April", @"May"];
+        NSLog(@"%@", OtherMonths);
         
+        for(int i=0; i<2; i++){
+            NSLog(@"%i %@", i, OtherMonths[i]);
+        }
+
+        NSMutableArray *numbers = [NSMutableArray array];//array creates an empty mutable array
+                                                         // and can grow as large as you like
+        for( int j=0; j<10; j++){
+            numbers[j] = @(j);//or
+            //[numbers addObject:@(j)];
+        }
+        
+        AddressCard *card1 = [[AddressCard alloc] init];
+        AddressCard *card2 = [[AddressCard alloc] init];
+        
+        [card1 setName:@"John Smith"];
+        [card2 setEmail:@"JohnS@server.com"];
+        [card2 setName:@"David Bacon"];
+        [card2 setEmail:@"davidb@server.com"];
+        
+        [card1 print];
+        [card2 print];
+        
+        AddressCard *card3 = [[AddressCard alloc] init];
+        
+        [card3 setName:@"Kevin Wag" andEmail:@"Johnny Depp"];
+        [card3 print];
+        
+        AddressBook *addrbook = [[AddressBook alloc] initWithName:@"My Address Book"];
+        
+        [addrbook addCard:card1];
+        [addrbook addCard:card2];
+        [addrbook addCard:card3];
+        
+        [addrbook list];
+        
+        NSLog(@"Entries:%li", [addrbook entries]);
+        
+        //Looking up sometbing in the address book
+        AddressCard *person = [addrbook lookup:@"Kevin Wag"];
+        if(person != nil)
+            NSLog(@"Person found");
+        else
+            NSLog(@"Person found");
+        
+        //Removing card
+        [addrbook removeCard:card3];
+        
+        //Sorting Arrays
+        [addrbook list];
+        [addrbook sort];
+        [addrbook list];
+        
+        //There are case in which you need to store structures or values for this you use NSValue
+        //this allows structures into objects, this is often called "wrapping"
+        
+        CGPoint myPoint;
+        NSValue *pointObj;
+        NSMutableArray *touchPoints=[NSMutableArray array];
+        myPoint.x =100;
+        myPoint.y = 200;
+        pointObj = [NSValue valueWithPoint:myPoint];
+        [touchPoints addObject:pointObj];
+        
+        // Dictionary Objects
+        // it is a collection of data consisting of key-object pairs
+        
+        NSMutableDictionary *glossary = [NSMutableDictionary dictionary];
+        [glossary setObject:@"A class defined so other classes can inherit from it" forKey:@"abstract class"];
+        [glossary setObject:@"To implement all the methods defined in a protocol" forKey:@"adopt"];
+        
+        NSLog(@"abstract class:%@", [glossary objectForKey:@"abstract"]);
+        NSLog(@"adopt:%@", glossary[@"adopt"]);
+        
+        for (NSString *key in glossary) {
+            NSLog(@"%@:%@", key, [glossary objectForKey:key]);
+        }
+        
+        //Another way to create immutable dictionary
+        
+        NSDictionary *dict = @{@"Abstract" : @"Abstract class", @"Adopt" : @"Adopt class" };
+        NSArray *keys = [dict allKeys];
+        for (NSString *key in keys) {
+            NSLog(@"%@:%@", key, [dict objectForKey:key]);
+        }
+        
+        //Set Objects
+        //It is collection of unique objects
         
     }
     return 0;
