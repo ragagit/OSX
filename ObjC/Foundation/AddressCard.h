@@ -36,4 +36,9 @@
 -(void)removeCard:(AddressCard*)theName;
 -(void)sort;
 @end
+
+@interface NSSet (Printing)
+-(void)print;
+@end
+
 #endif /* AddressCard_h */
