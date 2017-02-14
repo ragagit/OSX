@@ -316,6 +316,60 @@ int main(int argc, const char * argv[]) {
         //NSCountedSet can havd repeated objects, it just keep a count on each one
         
         //NSindexSet is used to store ordered indexes into some other data structure
+        
+        
+        //File management
+        //All starts with
+        NSFileManager *fm;
+        fm = [NSFileManager defaultManager];
+        
+        //Remove file
+        if( [ fm removeItemAtPath:@"todolist" error:NULL] == NO)
+            NSLog(@"Couldn't remove file todolidt");
+        
+        NSString *fName=@"/Users/raga/Documents/afile.txt";
+        NSString *fName1=@"/Users/raga/Documents/afilecopied.txt";
+        NSDictionary *attr;
+        
+        if( [fm fileExistsAtPath:fName] == YES)
+            NSLog(@"File exists");
+        else
+            NSLog((@"File doesn't exist"));
+        
+        //Copy file
+        if( [fm copyItemAtPath:fName toPath:fName1 error:NULL] == NO)
+            NSLog(@"Copy failed");
+        
+        //Check if those files are equal
+        if( [fm contentsEqualAtPath:fName andPath:fName1] == YES)
+            NSLog(@"Files are equal");
+        else
+            NSLog(@"Files are not equal");
+        
+        //Rename the copy
+        if( [fm moveItemAtPath:fName1 toPath:@"/Users/raga/Documents/afilecopied.txt" error:NULL] == YES)
+            NSLog(@"File could be renamed");
+        else
+            NSLog(@"Files could not be renamed");
+        
+        //Getting file properties
+        if( (attr = [fm attributesOfItemAtPath:fName1 error:NULL]) == nil)
+            NSLog(@"Couldn't get file attributes!");
+        
+        NSLog(@"File size: %llu bytes", [[attr objectForKey:NSFileSize] unsignedLongLongValue]);
+        
+        //Deleting a file
+        if( [fm removeItemAtPath:fName error:NULL] == NO)
+            NSLog(@"File removal failed");
+        
+        //Display the content of a file
+        NSLog(@"%@", [NSString stringWithContentsOfFile:fName1 encoding:NSUTF8StringEncoding error:NULL]);
+        
+        
+        
+        
+        
+        
     }
     return 0;
 }
