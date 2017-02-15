@@ -365,8 +365,93 @@ int main(int argc, const char * argv[]) {
         //Display the content of a file
         NSLog(@"%@", [NSString stringWithContentsOfFile:fName1 encoding:NSUTF8StringEncoding error:NULL]);
         
+        //NSData
+        //It reads data and stores in a buffer
+        NSData *fileData;
+        fileData = [fm contentsAtPath:fName1];
+        
+        if(fileData == nil)
+            NSLog(@"File read failed");
+        
+        //Writes data to a file
+        if( [fm createFileAtPath:fName contents:fileData attributes:nil]==NO)
+            NSLog(@"Couldn't create the copy");
+        else
+            NSLog(@"File copy successful!");
         
         
+        //Working with Directories
+        NSString *dirName = @"myDir";
+        NSString *path;
+        
+        path = [fm currentDirectoryPath];
+        NSLog(@"Current directory path:%@", path);
+        
+        //Creating a directory
+        if([ fm createDirectoryAtPath:dirName withIntermediateDirectories:YES attributes:nil error:NULL] == NO)
+            NSLog(@"Unable to craete directory");
+        
+        //Rename directory
+        if([fm moveItemAtPath:dirName toPath:@"newDir" error:NULL] == NO)
+            NSLog(@"Dir renamed failed");
+        
+        
+        //Changing directory
+        if([fm changeCurrentDirectoryPath:@"newDir"] == NO)
+            NSLog(@"Change directory failed");
+            
+        path = [fm currentDirectoryPath];
+        NSLog(@"Current directory path:%@", path);
+
+        // enumaratorAtPath: enumarates dir content and the contect of any dir inside
+        // contentsOfDircetoryAtPath: only files and dirs not dirs content
+        
+        NSDirectoryEnumerator *dirEnum;
+        NSArray *dirArray;
+        
+        //if([fm changeCurrentDirectoryPath:@"/Users/raga/Documents"] == NO)
+        //    NSLog(@"Change directory failed");
+        
+        dirEnum = [fm enumeratorAtPath:path];
+        BOOL flag;
+        while((path = [dirEnum nextObject]) != nil){
+            [fm fileExistsAtPath:path isDirectory:&flag];
+            if(flag == YES)
+                [dirEnum skipDescendants];
+              NSLog(@"%@", path);
+        }
+        
+        dirArray = [fm contentsOfDirectoryAtPath:[fm currentDirectoryPath] error:NULL];
+        
+        for(path in dirArray)
+            NSLog(@"%@", path);
+        
+        
+        //Working with paths
+        
+        //Get temporary working directory
+        NSString *tempdir = NSTemporaryDirectory();
+        NSString *fullpath;
+        NSLog(@"Temp directory is %@", tempdir);
+        
+        //Base dir
+        NSLog(@"Base dir is %@", [path lastPathComponent]);
+        
+        fullpath = [path stringByAppendingString: @"myfile.txt"];
+        
+        //File extension
+        NSString *ext = [fullpath pathExtension];
+        NSLog(@"Extension is:%@", ext);
+        
+        //Home directory
+        NSString *homedir = NSHomeDirectory(); //or NSHomeDirectoryForUSer
+        NSLog(@"Home dir:%@", homedir);
+        
+        //Devide path into components
+        NSArray *components = [homedir pathComponents];
+        
+        for( path in components)
+            NSLog(@"%@", path);
         
         
         
