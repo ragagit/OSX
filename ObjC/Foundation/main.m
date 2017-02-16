@@ -453,6 +453,50 @@ int main(int argc, const char * argv[]) {
         for( path in components)
             NSLog(@"%@", path);
         
+        //Some useful functions
+        //NSUserName NSFullUserName NSHomeDirectory NSHomeDirectoryForUser NSTemporaryDirectory
+        //Also NSSearchPathForDirectoriesInDomains helsp to locate directories on the system or device
+        //Each iOS application gets its own Documents directory that it can write data into.
+        NSArray *dirList = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *docDir = dirList[0];
+        NSLog(@"%@", docDir);
+        
+        //Other directories you might want to locate are Caches
+        
+        //Copying Files nad using NSProcessInfo
+        //The NSProcessInfo gives inormation about your process including args passed to the program
+        //processInfo, arguments, environment, processName, hostName
+        
+        NSProcessInfo *proc = [NSProcessInfo processInfo];
+        NSArray *args = [proc arguments];
+        if( [args count] != 3)
+            NSLog(@"Usage: %@ src dest", [proc processName]);
+        
+        //File Operation NSFileHandle
+        NSFileHandle *inFile, *outFile;
+        
+        inFile = [NSFileHandle fileHandleForReadingAtPath:fName1];
+        if(inFile == nil)
+            NSLog(@"Open failed");
+        
+        [fm createFileAtPath:fName contents:nil attributes:nil];
+        
+        outFile = [NSFileHandle fileHandleForWritingAtPath:fName];
+        
+        if(outFile == nil)
+            NSLog(@"Open file for writng failed");
+        
+        [outFile truncateFileAtOffset:0];
+        
+        NSData *buffer = [inFile readDataToEndOfFile];// or readDataOfLength:
+        
+        // [inFile seekToFileOffset] or seekToEndOfFile
+        //
+        
+        [outFile writeData: buffer];
+        
+        [inFile closeFile];
+        [outFile closeFile];
         
         
     }
