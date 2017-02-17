@@ -498,6 +498,30 @@ int main(int argc, const char * argv[]) {
         [inFile closeFile];
         [outFile closeFile];
         
+        //NSURL
+        //Read the content of a file stored at a URL
+        
+        NSURL *myURL = [NSURL URLWithString:@"http://classroomM.com"];
+        
+        NSString *myHomePage = [NSString stringWithContentsOfURL:myURL encoding:NSASCIIStringEncoding error:NULL];
+        
+        NSLog(@"%@", myHomePage);
+        
+        //NSBundle
+        //When you create an application, the system stores all the data associated with that application, like images
+        //localized strings, icons, and so on- into a package known as an application bundle. To access those resources
+        //you need NSBundle
+        //To make a resurce part of you application just drag it into the left part of the xcode
+        //For example if you have a file called instructions.txt in your application bundle to access to it
+        NSString *txtFilePath = [[NSBundle mainBundle] pathForResource:@"instructions" ofType:@"txt"];
+        //mainBundle gives the dircetory where the application bundle is located. Then you read the content like this
+        NSString *instructions = [NSString stringWithContentsOfFile:txtFilePath encoding:NSUTF8StringEncoding error:NULL];
+        NSLog(@"%@", instructions);
+        
+        NSArray *birds = [[NSBundle mainBundle] pathsForResourcesOfType:@"jpg" inDirectory:@"birdsImages"];
+        NSLog(@"%@", birds);
+        
+        
         
     }
     return 0;
