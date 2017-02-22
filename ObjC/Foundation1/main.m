@@ -1,4 +1,5 @@
 #include <Foundation/Foundation.h>
+#include "copy.h"
 
 int main(int argc, const char * argv[])
 {
@@ -53,5 +54,51 @@ int main(int argc, const char * argv[])
     // @property (weak, nonatomic)
     // if your program generates a lot of temporary objects you may want to create multiple
     // autoreleasepools
+    
+    // Chapter 18 Copying Objects
+    // If you have two objects Obj1 and Obj2 Obj1 = Obj2 will point to the same address
+    // To copy an object id one by implementing a method in conformance with the <NSCopying>
+    // or <NSMutableCopying>
+    
+    NSMutableArray *arr1 = [NSMutableArray array];
+    NSMutableArray *arr2 = [arr1 mutableCopy];
+    NSMutableArray *dataArray = [NSMutableArray arrayWithObjects:@"one", @"two", nil];
+    
+    NSLog(@"%@", dataArray);
+    
+    [arr2 removeObjectAtIndex:1];
+    
+    //shallow copy even you use mutableCopy changing one element will change the second/
+    //to avoid that you need deep copy
+    
+    //Implementing <NSCopying> protocol or ,NSMutableCopying> 
+    //Your class must implement the copyWithZone: method or mutableCopyWithZone and invokes
+    //the copy method to make a copy
+    
+    Copy *mycop = [[Copy alloc] init];
+    Copy *mycop1;
+    
+    mycop1 = [mycop copy];
+    
+    
+    //if your class might be subclassed your copyWithZone: method will be inherited
+    
+    // Fraction *newFract = [[Fraction allocWithZone: zone] init];
+    // id newFract = [[[self class] allocWithZone: zone] init];
+    // if you are writing a copyWithZone: method for a class whose superclass also implement
+    // the <NSCopying> protocol you should call first the copy of the superclass then include
+    // your own code
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     return 0;
 }
