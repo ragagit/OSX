@@ -10,6 +10,10 @@
 #define copy_h
 
 @interface Copy : NSObject <NSCopying>
+{
+    NSString *name;
+}
 -(void)print;
+-(void)setName: (NSString*) theName;
 @end
 #endif /* copy_h */

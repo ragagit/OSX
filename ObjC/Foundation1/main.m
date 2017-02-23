@@ -89,10 +89,19 @@ int main(int argc, const char * argv[])
     // the <NSCopying> protocol you should call first the copy of the superclass then include
     // your own code
     
+    // Copying Objects in setter and getter methods
+    //if you don't synthesize you can implement the copy in the setter
     
+    Copy *cop1 = [[Copy alloc] init];
+    NSString *str = @"This is my string";
+    NSString *str1 = [NSString stringWithString:str];
     
+    [cop1 setName:str1];
+    [cop1 print];
     
-    
+    //Or you can use the copy in the property. This will use your copy or the one you
+    //inherited
+    //@property (nanotomic, copy) NSString *name;
     
     
     

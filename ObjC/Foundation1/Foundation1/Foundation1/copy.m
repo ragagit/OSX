@@ -12,12 +12,16 @@
 @implementation Copy
 
 -(void)print{
-    NSLog(@"Hello Copy");
+    NSLog(@"Hello Copy:%@", name);
 }
 
 -(id) copyWithZone:(NSZone *)zone{
     NSString *newStr = [[NSString allocWithZone:zone] init];
     return newStr;
+}
+
+-(void)setName: (NSString*) theName{
+    name = [theName copy];
 }
 
 @end
