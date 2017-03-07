@@ -11,6 +11,8 @@
 
 @implementation Copy
 
+@synthesize name;
+
 -(void)print{
     NSLog(@"Hello Copy:%@", name);
 }
@@ -20,8 +22,18 @@
     return newStr;
 }
 
--(void)setName: (NSString*) theName{
-    name = [theName copy];
+
+//-(void)setName: (NSString*) theName{
+//    name = [theName copy];
+//}
+
+-(void)encodeWithCoder:(NSCoder *)encoder{
+    [encoder encodeObject:name forKey:@"Name"];
 }
 
+-(id)initWithCoder:(NSCoder *)decoder{
+    name=[decoder decodeObjectForKey:@"Name"];
+    
+    return self;
+}
 @end

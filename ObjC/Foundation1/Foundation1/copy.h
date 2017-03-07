@@ -9,10 +9,10 @@
 #ifndef copy_h
 #define copy_h
 
-@interface Copy : NSObject <NSCopying>
-{
-    NSString *name;
-}
+@interface Copy : NSObject <NSCopying, NSCoding>
+
+@property NSString *name;
+
 -(void)print;
 -(void)setName: (NSString*) theName;
 @end

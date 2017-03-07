@@ -26,8 +26,8 @@ int main(int argc, const char * argv[])
     // the autoreleasepool takes care of that, it drains the pool. To add an object to the list
     // of objects you do
     // [result autorelease]
-    // Mot all newly created objects are added to the autorelease pool, those created with
-    // alloc, copy, mutableCopy or new, you are said to ownthe object. You are responsible to
+    // Not all newly created objects are added to the autorelease pool, those created with
+    // alloc, copy, mutableCopy or new, you are said to own the object. You are responsible to
     // release the object
     // [ frac1 release]
     // Fraction *result = [[Fraction alloc] init] autorelease]; or
@@ -38,7 +38,7 @@ int main(int argc, const char * argv[])
     // @property( nonatomic, retain )
     // To ensure the array's survival at the end of the event loops
     // data = [[ NSMutableArray array] retain];
-    // data = [[NSMutableArray alloc] init
+    // data = [[NSMutableArray alloc] init]
     // self.data = [ NSMutableArray array];
     // By default all object pointer variables are strong variables, this means assigning an
     // object reference to such a variable causes that object to be retained. Further the old
@@ -65,8 +65,9 @@ int main(int argc, const char * argv[])
     NSMutableArray *dataArray = [NSMutableArray arrayWithObjects:@"one", @"two", nil];
     
     NSLog(@"%@", dataArray);
+    NSLog(@"%@", arr2);
     
-    [arr2 removeObjectAtIndex:1];
+    [dataArray removeObjectAtIndex:1];
     
     //shallow copy even you use mutableCopy changing one element will change the second/
     //to avoid that you need deep copy
@@ -103,10 +104,98 @@ int main(int argc, const char * argv[])
     //inherited
     //@property (nanotomic, copy) NSString *name;
     
+    // Chapter 19 Archiving
+    //Archiving with XML propertiey lists
+    //MAc OSX applications use XML property lists (plists) for sorting things such as your
+    //default preferences, application settings and configuration
+    //NSString, NSDictionary, NSArray, NSDate, NSNumber you can use writeToFile:atomically
+    
+    NSDictionary *glossary = @{ @"abstract class":@"A class defined",
+                                @"adopt":@"To implement all methids",
+                                @"archiving":@"storing an object"};
+    
+    if( [glossary writeToFile:@"glossary" atomically:YES] == NO)
+        NSLog(@"Save to file failed!");
+    
+    //For reading you use dictionaryWithContentsOfFile: arrayWithContentsOfFile:
+    // dataWithContentsOfFile, stringWithContentsOfFile:
+    
+    NSDictionary *gloss = [NSDictionary dictionaryWithContentsOfFile:@"glossary"];
+    
+    for( NSString *key in gloss)
+        NSLog(@"%@: %@", key, gloss[key]);
+    
+    //There are deafult encoder/decoder for basic types
+    // encodeBool:forKey:   decodeBool:forKey
+    // encodeInt:forKey:    decodeInt:forKey
+    // encodeDouble:forKey: decodeDouble:forKey
+                                
+    //Archiving with NSKeyedArchiver
+    //It enables you to save any type of objects, this is done by creating keyed archive
+    //before sequential archive was created with NSArchiver class. Sequential archives
+    //requires that the data be read back in precisely the same order in which was written
+    //when you archuve an objectyou give a key
+    [NSKeyedArchiver archiveRootObject:glossary toFile:@"glossary.archive"];
+    
+    NSDictionary *gloss1 = [NSKeyedUnarchiver unarchiveObjectWithFile:@"glossary.archive"];
+    
+    for(NSString *key in glossary)
+        NSLog(@"%@: %@", key, gloss1[key]);
+    
+    //Wrtiting Encoding and Decoding Methods
+    //To archive your own class you need to specify encode and decode encodeWithCoder:
+    //and initWithDecoder according to <NSCoding>
+    
+    Copy *myObj = [[Copy alloc] init];
+    myObj.name = @"myname";
+    if([NSKeyedArchiver archiveRootObject:myObj toFile:@"copy.archive"] == NO){
+        NSLog(@"Archiving failed");
+    }
+    
+    Copy *mystr = [NSKeyedUnarchiver unarchiveObjectWithFile:@"copy.archive"];
+    NSLog(@"my string is:%@", mystr.name);
+    
+    //Using NSData to create custom archives
+    //The next statement creates a mutable data area (buffer)
+    // buffer = [NSMutableData data];
+    
+    NSMutableData *dataArea = [NSMutableData data];
     
     
+    @try {
+        NSArchiver *arch = [[NSArchiver alloc] initForWritingWithMutableData:dataArea];
+        
+        [arch encodeObject:mystr forKey:@"mybook"];
+
+        if([dataArea writeToFile:@"myarchive" atomically:YES] == NO){
+            NSLog(@"Archiving failed");
+        }
+
+    } @catch (NSException *exception) {
+        NSLog(@"reason:%@", exception.reason);
+    } @finally {
+        NSLog(@"Archiving failed");
+    }
     
+    //Deep copy of objects (using memory)
+    NSData *data;
+    NSMutableArray *dArray=[NSMutableArray arrayWithObjects:
+                               [NSMutableString stringWithString:@"one"],
+                               [NSMutableString stringWithString:@"two"],
+                               [NSMutableString stringWithString:@"three"],nil];
     
+    NSMutableArray *dArray2;
+    NSMutableString *mStr;
+    
+    data = [NSKeyedArchiver archivedDataWithRootObject:dArray];
+    
+    dArray2 = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    
+    mStr = dArray2[0];
+    
+    [mStr appendString:@"ONE"];
+    
+    NSLog(@"%@", mStr);
     
     
     return 0;
